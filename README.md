@@ -2,6 +2,8 @@
 Productivity app powered by SAMBA AI
 D.U.C.K - (Digital. Useful. Companion. Keeper.)
 Made by Eucharist Tan, Kaden Chan, Andrew Yi, Joshua John
+
+https://devpost.com/submit-to/22819-hackutd-2024-ripple-effect/manage/submissions
 ## Inspiration
 Many people, especially students, have trouble focusing on what needs to be done. Whether they end up checking other tabs on their computer, being unable to study for a set amount of time, or have little motivation to do so.
 
