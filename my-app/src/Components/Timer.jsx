@@ -1,69 +1,87 @@
-import React, { useState, useRef } from "react";
-import "./Styles.css";
+import React, { useState, useRef } from 'react';
+import './Styles.css';
 
 const Timer = () => {
   const [inputHours, setInputHours] = useState(0);
   const [inputMinutes, setInputMinutes] = useState(0);
   const [inputSeconds, setInputSeconds] = useState(0);
-
-  const [timerTime, setTimerTime] = useState(0);
+  const [timerTime, setTimerTime] = useState(0); // Time in seconds
   const [timerOn, setTimerOn] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const [completedTimers, setCompletedTimers] = useState([]);
+  const [isPaused, setIsPaused] = useState(false); // New state for pause tracking
+  const [completedTimers, setCompletedTimers] = useState([]); // State for completed timers
 
   const timerRef = useRef(null);
 
   const startTimer = () => {
-    if (!timerOn) {
-      const totalSeconds = isPaused
-        ? timerTime
-        : inputHours * 3600 + inputMinutes * 60 + inputSeconds;
-  
-      if (totalSeconds <= 0) return; // Prevent starting the timer with 0 seconds
-  
+    let endTime;
+
+    if (isPaused) {
       setTimerOn(true);
       setIsPaused(false);
-      setTimerTime(totalSeconds);
-  
-      let hasLogged = false; // Track if the timer has been logged
-  
       timerRef.current = setInterval(() => {
-        setTimerTime((prevTime) => {
-          if (prevTime <= 1) {
-            clearInterval(timerRef.current);
-            setTimerOn(false);
-            setIsPaused(false);
-  
-            if (!hasLogged) {
-              logCompletedTimer(totalSeconds); // Log only once
-              hasLogged = true; // Prevent future logs
-            }
-  
-            setTimerTime(0);
-            openWebpage();
-            return 0;
-          }
-          return prevTime - 1;
-        });
+        const timeLeft = Math.max(0, endTime - Date.now());
+        setTimerTime(Math.ceil(timeLeft / 1000));
+        if (timeLeft <= 0) {
+          clearInterval(timerRef.current);
+          setTimerOn(false);
+          logCompletedTimer(timerTime);
+          openWebpage();
+        }
       }, 1000);
+      return;
     }
-  };
-  
 
-  const pauseTimer = () => {
-    if (timerOn) {
-      setTimerOn(false);
-      setIsPaused(true);
-      clearInterval(timerRef.current);
+    if (!timerOn) {
+      const totalSeconds = inputHours * 3600 + inputMinutes * 60 + inputSeconds;
+      if (totalSeconds <= 0) return; // Prevent starting with 0 time
+      endTime = Date.now() + totalSeconds * 1000; // Calculate end time
+      setTimerOn(true);
+      setTimerTime(totalSeconds);
+
+      timerRef.current = setInterval(() => {
+        const timeLeft = Math.max(0, endTime - Date.now());
+        setTimerTime(Math.ceil(timeLeft / 1000));
+        if (timeLeft <= 0) {
+          clearInterval(timerRef.current);
+          setTimerOn(false);
+          logCompletedTimer(totalSeconds);
+          openWebpage();
+        }
+      }, 1000);
     }
   };
 
   const stopTimer = () => {
-    setTimerOn(false);
-    setIsPaused(false);
     clearInterval(timerRef.current);
+    timerRef.current = null;
+    setTimerOn(false);
     setTimerTime(0);
+    setIsPaused(false);
+  };
+
+  const pauseTimer = () => {
+    if (timerOn) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+      setTimerOn(false);
+      setIsPaused(true);
+    }
+  };
+
+  const openWebpage = (() => {
+    let triggered = false;
+    return () => {
+      if (!triggered) {
+        triggered = true;
+        window.open("https://wordleunlimited.org/", "_blank");
+        setTimeout(() => (triggered = false), 1000);
+      }
+    };
+  })();
+
+  const handleInputChange = (value, setter, maxValue) => {
+    const numericValue = Math.max(0, Math.min(parseInt(value) || 0, maxValue));
+    setter(numericValue);
   };
 
   const logCompletedTimer = (timeInSeconds) => {
@@ -71,21 +89,8 @@ const Timer = () => {
     const minutes = Math.floor((timeInSeconds % 3600) / 60);
     const seconds = timeInSeconds % 60;
 
-    const formattedTime = `${hours > 0 ? hours + "h " : ""}${
-      minutes > 0 ? minutes + "m " : ""
-    }${seconds}s`;
-
-    setCompletedTimers((prev) => [...prev, formattedTime]);
-  };
-
-  const openWebpage = () => {
-    const url = "https://wordleunlimited.org/";
-    window.open(url, "_blank");
-  };
-
-  const handleInputChange = (value, setter, maxValue) => {
-    const numericValue = Math.max(0, Math.min(parseInt(value) || 0, maxValue));
-    setter(numericValue);
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    setCompletedTimers((prevTimers) => [...prevTimers, formattedTime]);
   };
 
   const hours = Math.floor(timerTime / 3600);
@@ -143,7 +148,7 @@ const Timer = () => {
       </div>
       <div className="timer-display">
         <h1>
-          {`${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`}
+          {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}
         </h1>
       </div>
       <button
@@ -156,21 +161,20 @@ const Timer = () => {
       </button>
       <button
         type="button"
-        className="btn btn-warning me-2"
-        onClick={pauseTimer}
-        disabled={!timerOn}
-      >
-        Pause Timer
-      </button>
-      <button
-        type="button"
-        className="btn btn-danger"
+        className="btn btn-danger me-2"
         onClick={stopTimer}
         disabled={!timerOn && !isPaused}
       >
         Stop Timer
       </button>
-
+      <button
+        type="button"
+        className="btn btn-warning"
+        onClick={pauseTimer}
+        disabled={!timerOn}
+      >
+        Pause Timer
+      </button>
       <div className="completed-timers mt-4">
         <h2>Completed Timers</h2>
         <ul>
