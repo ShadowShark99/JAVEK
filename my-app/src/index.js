@@ -4,13 +4,16 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Navbar from './Components/Navbar';
 import About from './Components/About';
+import Timer from './Components/Timer';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-  
+
     <Navbar/>
     <About/>
+    <Timer/>
 
   </React.StrictMode>
 );

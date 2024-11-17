@@ -4,12 +4,12 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
 // TODO: Add SDKs for Firebase products that you want to use// https://firebase.google.com/docs/web/setup#available-libraries// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "9ee0daa3-eef4-4c3b-87cf-36e83030bfea",
-  authDomain: "YOUR_AUTH_DOMAIN",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_STORAGE_BUCKET",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBS8tSvYRSm_ieoNVzw0uz5taGu9l_9YeE",
+  authDomain: "hackathon2024-ceaeb.firebaseapp.com",
+  projectId: "hackathon2024-ceaeb",
+  storageBucket: "hackathon2024-ceaeb.firebasestorage.app",
+  messagingSenderId: "909768592105",
+  appId: "1:909768592105:web:3ffda465d8aa8a0a337e78"
 };
 
 // Initialize Firebase
