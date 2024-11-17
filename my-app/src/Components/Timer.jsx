@@ -12,65 +12,73 @@ const Timer = () => {
   const timerRef = useRef(null);
 
   const startTimer = () => {
-    // If the timer is paused, resume without resetting the timerTime
+    // Declare endTime outside of the isPaused and timerOn checks for proper scoping
+    let endTime;
+  
     if (isPaused) {
       setTimerOn(true);
-      setIsPaused(false); // Reset the pause state
-
+      setIsPaused(false);
       timerRef.current = setInterval(() => {
-        setTimerTime((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerRef.current);
-            setTimerOn(false);
-            openWebpage();
-            return 0;
-          }
-          return prev - 1;
-        });
+        const timeLeft = Math.max(0, endTime - Date.now());
+        setTimerTime(Math.ceil(timeLeft / 1000));
+        if (timeLeft <= 0) {
+          clearInterval(timerRef.current);
+          setTimerOn(false);
+          openWebpage();
+        }
       }, 1000);
-
       return;
     }
-
-    // Start the timer fresh
+  
     if (!timerOn) {
+      const totalSeconds = inputHours * 3600 + inputMinutes * 60 + inputSeconds;
+      endTime = Date.now() + totalSeconds * 1000; // Calculate end time
       setTimerOn(true);
-      let totalSeconds = inputHours * 3600 + inputMinutes * 60 + inputSeconds;
       setTimerTime(totalSeconds);
-
+  
       timerRef.current = setInterval(() => {
-        setTimerTime((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerRef.current);
-            setTimerOn(false);
-            openWebpage();
-            return 0;
-          }
-          return prev - 1;
-        });
+        const timeLeft = Math.max(0, endTime - Date.now());
+        setTimerTime(Math.ceil(timeLeft / 1000));
+        if (timeLeft <= 0) {
+          clearInterval(timerRef.current);
+          setTimerOn(false);
+          openWebpage();
+        }
       }, 1000);
     }
   };
+  
+  
 
   const stopTimer = () => {
-    setTimerOn(false);
     clearInterval(timerRef.current);
-    setTimerTime(0); // Reset timer
-    setIsPaused(false); // Reset pause state
+    timerRef.current = null; // Ensure the reference is cleared
+    setTimerOn(false);
+    setTimerTime(0);
+    setIsPaused(false);
   };
-
+  
   const pauseTimer = () => {
     if (timerOn) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
       setTimerOn(false);
-      setIsPaused(true); // Set the pause state
-      clearInterval(timerRef.current); // Stop the countdown without resetting the timer
+      setIsPaused(true);
     }
   };
+  
 
-  const openWebpage = () => {
-    const url = "https://wordleunlimited.org/";
-    window.open(url, "_blank");
-  };
+  const openWebpage = (() => {
+    let triggered = false;
+    return () => {
+      if (!triggered) {
+        triggered = true;
+        window.open("https://wordleunlimited.org/", "_blank");
+        setTimeout(() => (triggered = false), 1000); // Reset after a second
+      }
+    };
+  })();
+  
 
   const handleInputChange = (value, setter, maxValue) => {
     const numericValue = Math.max(0, Math.min(parseInt(value) || 0, maxValue));
