@@ -1,4 +1,4 @@
-npmimport React from 'react'
+import React from 'react'
 import './Styles.css';
 
 const Timer = () => {
