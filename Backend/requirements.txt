@@ -1,0 +1,10 @@
+python-dotenv
+os
+orjson
+requests
+datetime
+psycopg2
+flask
+certifi
+pydantic 
+asyncpg

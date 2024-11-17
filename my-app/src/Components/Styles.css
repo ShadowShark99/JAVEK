@@ -1,0 +1,41 @@
+
+.homeBar{
+    display: inline-block;
+    display: fixed;
+    background-color :#4B388D;
+    height: 5rem;
+    width: 100%;
+}
+.h1_home{
+    position : relative;
+    left : 3rem;
+    color : #FBFCF5;
+    
+}
+.about_card{
+    display: inline-block;
+    background-color :#426A8D;
+    height: 30rem;
+}
+.p_about{
+    position : relative;
+    float : right;
+    height: 30rem;
+    font-size: 5rem;
+    color :#FBFCF5;
+
+}
+.p_aboutInfo{
+    height: 30rem;
+    right : 3rem;
+    font-size: 2rem;
+    color :#000000;
+
+}
+.picture{
+    width : 60rem;
+    padding: 2rem;
+    float : left;
+}
+
+
