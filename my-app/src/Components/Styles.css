@@ -47,13 +47,13 @@
 /* Layout for Button Container */
 .button-container {
     display: flex;
-    flex-direction: row; /* Stack buttons vertically */
-    gap: 1rem; /* Add space between buttons */
-    align-items: flex-start; /* Align buttons to the left */
+    flex-direction: row;
+    gap: 1rem; 
+    align-items: flex-start;
 }
   /* Custom button styles */
   .custom-start-button {
-    background-color: #28a745; /* Green */
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 4px;
@@ -63,7 +63,7 @@
   }
   
   .custom-pause-button {
-    background-color: #ffc107; /* Yellow */
+    background-color: #ffc107; 
     color: black;
     border: none;
     border-radius: 4px;
@@ -73,7 +73,7 @@
   }
   
   .custom-stop-button {
-    background-color: #dc3545; /* Red */
+    background-color: #dc3545; 
     color: white;
     border: none;
     border-radius: 4px;
@@ -85,7 +85,7 @@
 button {
     width: 12rem;
     height: 6rem;
-    background-color: #ffcc00; /* Example yellow color */
+    background-color: #ffcc00; 
     border: none;
     color: white;
     font-size: 1.5rem;
@@ -93,14 +93,13 @@ button {
     transition: background-color 0.3s ease;
 }
 
-
-/* Layout for Input Section */
+/*Input*/
 .input-container {
     display: flex;
-    flex-direction: column; /* Stack inputs vertically */
-    gap: 1rem; /* Space between inputs */
-    width: 400px; /* Set width for input container */
-    margin-right: auto; /* Align to the left side */
+    flex-direction: column;
+    gap: 1rem; 
+    width: 400px; 
+    margin-right: auto; 
 }
 
 input[type="number"] {
