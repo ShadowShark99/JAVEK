@@ -45,8 +45,17 @@
     padding: 2rem;
     float : left;
 }
+button{
+    display: inline-block;
+    position: relative;
+    width : 12rem;
+    height: 6rem;
+    left : 70rem;
+}
 .start_button{
-    width : 2rem;
 
+}
+.stop_button{
+    
 }
 
